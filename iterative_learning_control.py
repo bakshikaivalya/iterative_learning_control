@@ -78,29 +78,31 @@ class performILC:
             e_prev, u_prev = e, u
             # making a nice simulation in time over all learning episodes
             plt.figure(0)
+            plt.title('ILC All episodes', fontSize=32)
+            plt.xlabel('time step', fontSize=32)
+            plt.ylabel('output', fontSize=32)
+            plt.xticks(fontsize=25)
+            plt.yticks(fontsize=25)
+            plt.grid()
             if k == 0:
-                plt.plot(np.arange(self.T), yd, 'k-.', markersize=2, label='reference')
+                plt.pause(5) if k == 0 else plt.pause(5)
+                plt.plot(np.arange(self.T), yd, color='k', linestyle='--', markersize=4, label='reference')
             for t in range(T):
-                plt.plot(t, traj[k][t], 'r_', markersize=1, alpha=(0.75 + 0.25*(k+1)/(K+1)))
-                plt.legend()
-                # plt.pause(1/T**3)
+                plt.plot(t, traj[k][t], color='r',  marker='.', markersize=2.5, alpha=(0.10 + 0.90*(k+1)/(K+1)))
+                plt.legend(fontsize=22, loc=4)
+                plt.pause(1/T**3/100)
             label = 'episode ' + str(k)
-            plt.plot(np.arange(T), traj[k], label=label)
+            plt.plot(np.arange(T), traj[k], markersize=3, label=label, alpha=(0.10 + 0.90*(k+1)/(K+1)))
             k += 1
             self.k = k  # required to communicate the iteration number to trajComp(self, u_prev, e_prev)
-            plt.title('Iterative learning control over all episodes')
-            plt.xlabel('time step')
-            plt.ylabel('output')
         return yd, traj
 
 if __name__ == '__main__':
     plt.close('all')
     # siso_linear = performILC(T=100, K=10, gamma=0.5, example='linear')
     # yd, traj = siso_linear.ILC()
-    # plt.grid()
     # plt.savefig('lin_sisoILC')
     # plt.clf()
-    siso_nonlinear = performILC(T=100, K=11, gamma=0.5, example='nonlinear')
+    siso_nonlinear = performILC(T=100, K=10, gamma=0.5, example='nonlinear')
     yd, traj = siso_nonlinear.ILC()
     plt.savefig('nonlin_sisoILC')
-    plt.grid()
